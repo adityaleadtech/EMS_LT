@@ -1,3 +1,4 @@
+# app/models/hierarchy/panchayat_ward.py
 from __future__ import annotations
 
 from datetime import datetime
@@ -93,7 +94,7 @@ class PanchayatWard(Base):
         nullable=False
     )
 
-    # Relationships
+    # Relationships - Use string references
     block: Mapped["Block"] = relationship(
         "Block",
         back_populates="panchayat_wards"

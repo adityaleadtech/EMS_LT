@@ -1,14 +1,18 @@
+# app/models/hierarchy/polling_booth.py
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 from uuid import uuid4
 import enum
 
 from sqlalchemy import Boolean, DateTime, String, Integer, ForeignKey, Text, DECIMAL, Enum, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.config.database import Base
+from app.core.database import Base
+
+# ❌ REMOVE this import:
+# from app.modules.hierarchy.panchayat_ward import PanchayatWard
 
 
 class PollingStationType(str, enum.Enum):
@@ -107,8 +111,8 @@ class PollingBooth(Base):
         nullable=False
     )
 
-    # Relationships
+    # ✅ Relationships - Use string references (NO imports needed)
     panchayat_ward: Mapped["PanchayatWard"] = relationship(
-        "PanchayatWard",
+        "PanchayatWard",  # String reference
         back_populates="polling_booths"
     )

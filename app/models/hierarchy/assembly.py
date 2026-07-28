@@ -10,10 +10,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 
-# ❌ REMOVE any imports like:
-# from app.models.hierarchy.pc_district import PCDistrict
-# from app.models.hierarchy.state import State
-
 
 class Assembly(Base):
     __tablename__ = "assemblies"
@@ -31,10 +27,52 @@ class Assembly(Base):
         index=True
     )
 
-    # ... other fields ...
+    # Add your actual fields here (I'm guessing based on common patterns)
+    code: Mapped[Optional[str]] = mapped_column(
+        String(20),
+        nullable=True,
+        index=True
+    )
+
+    name: Mapped[Optional[str]] = mapped_column(
+        String(100),
+        nullable=True,
+        index=True
+    )
+
+    assembly_number: Mapped[Optional[int]] = mapped_column(
+        Integer,
+        nullable=True
+    )
+
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        nullable=False
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        server_default=func.now(),
+        nullable=False
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False
+    )
 
     # ✅ Relationships - Use string references
     pc_district: Mapped["PCDistrict"] = relationship(
-        "PCDistrict",  # String reference
+        "PCDistrict",
         back_populates="assemblies"
+    )
+
+    # ⭐ ADD THIS - blocks relationship
+    blocks: Mapped[List["Block"]] = relationship(
+        "Block",
+        back_populates="assembly",
+        cascade="all, delete-orphan"
     )
