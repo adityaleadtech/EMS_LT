@@ -13,6 +13,8 @@ from app.routes.hierarchy import (
     master_router
 )
 
+from app.routes.platform_users.platform_users import router as platform_users_router
+from app.routes.platform_admins.platform_admin import router as platform_admins_router 
 app = FastAPI(
     title="Election Management System",
     description="EMS with Hierarchical Master Data Management",
@@ -29,6 +31,8 @@ app.add_middleware(
 )
 
 # Include hierarchy routers
+app.include_router(platform_admins_router)
+app.include_router(platform_users_router)
 app.include_router(country_router)
 app.include_router(state_router)
 app.include_router(pc_district_router)
