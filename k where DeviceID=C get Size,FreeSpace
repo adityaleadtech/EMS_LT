@@ -1,0 +1,66 @@
+[1mdiff --git a/app/main.py b/app/main.py[m
+[1mindex 2121b5e..6bc4f7b 100644[m
+[1m--- a/app/main.py[m
+[1m+++ b/app/main.py[m
+[36m@@ -1,8 +1,5 @@[m
+ from fastapi import FastAPI[m
+ from fastapi.middleware.cors import CORSMiddleware[m
+[31m-from app.routes.platform_admins.platform_admin import router as platform_admin_router[m
+[31m-[m
+[31m-# Import existing routes[m
+ [m
+ # Import hierarchy routes[m
+ from app.routes.hierarchy import ([m
+[36m@@ -12,7 +9,8 @@[m [mfrom app.routes.hierarchy import ([m
+     assembly_router,[m
+     block_router,[m
+     panchayat_ward_router,[m
+[31m-    polling_booth_router[m
+[32m+[m[32m    polling_booth_router,[m
+[32m+[m[32m    master_router[m
+ )[m
+ [m
+ app = FastAPI([m
+[36m@@ -30,8 +28,6 @@[m [mapp.add_middleware([m
+     allow_headers=["*"],[m
+ )[m
+ [m
+[31m-[m
+[31m-[m
+ # Include hierarchy routers[m
+ app.include_router(country_router)[m
+ app.include_router(state_router)[m
+[36m@@ -40,8 +36,7 @@[m [mapp.include_router(assembly_router)[m
+ app.include_router(block_router)[m
+ app.include_router(panchayat_ward_router)[m
+ app.include_router(polling_booth_router)[m
+[31m-[m
+[31m-app.include_router(platform_admin_router)[m
+[32m+[m[32mapp.include_router(master_router)[m
+ [m
+ @app.get("/")[m
+ def root():[m
+[36m@@ -49,9 +44,6 @@[m [mdef root():[m
+         "message": "EMS Backend Running",[m
+         "version": "1.0.0",[m
+         "endpoints": {[m
+[31m-            "auth": "/api/v1/auth",[m
+[31m-            "users": "/api/v1/users",[m
+[31m-            "clients": "/api/v1/clients",[m
+             "hierarchy": {[m
+                 "countries": "/api/v1/hierarchy/countries",[m
+                 "states": "/api/v1/hierarchy/states",[m
+[36m@@ -59,7 +51,12 @@[m [mdef root():[m
+                 "assemblies": "/api/v1/hierarchy/assemblies",[m
+                 "blocks": "/api/v1/hierarchy/blocks",[m
+                 "panchayat_wards": "/api/v1/hierarchy/panchayat-wards",[m
+[31m-                "polling_booths": "/api/v1/hierarchy/polling-booths"[m
+[32m+[m[32m                "polling_booths": "/api/v1/hierarchy/polling-booths",[m
+[32m+[m[32m                "master": {[m
+[32m+[m[32m                    "tree": "/api/v1/hierarchy/master/tree",[m
+[32m+[m[32m                    "flat": "/api/v1/hierarchy/master/flat",[m
+[32m+[m[32m                    "country_tree": "/api/v1/hierarchy/master/country/{country_id}/tree"[m
+[32m+[m[32m                }[m
+             }[m
+         }[m
+     }[m

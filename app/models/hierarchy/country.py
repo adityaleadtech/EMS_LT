@@ -1,3 +1,4 @@
+# app/models/hierarchy/country.py
 from __future__ import annotations
 
 from datetime import datetime
@@ -9,7 +10,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 
-# REMOVE: from app.models.hierarchy.state import State
+# REMOVE THIS LINE:
+# from app.models.hierarchy.state import State
 
 
 class Country(Base):
@@ -90,7 +92,7 @@ class Country(Base):
 
     # Relationships - Use string reference
     states: Mapped[List["State"]] = relationship(
-        "State",  # String reference
+        "State",  # String reference - no import needed
         back_populates="country",
         cascade="all, delete-orphan"
     )
