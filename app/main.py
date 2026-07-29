@@ -1,8 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes.platform_admins.platform_admin import router as platform_admin_router
-
-# Import existing routes
 
 # Import hierarchy routes
 from app.routes.hierarchy import (
@@ -12,7 +9,8 @@ from app.routes.hierarchy import (
     assembly_router,
     block_router,
     panchayat_ward_router,
-    polling_booth_router
+    polling_booth_router,
+    master_router
 )
 
 app = FastAPI(
@@ -30,8 +28,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-
 # Include hierarchy routers
 app.include_router(country_router)
 app.include_router(state_router)
@@ -40,8 +36,7 @@ app.include_router(assembly_router)
 app.include_router(block_router)
 app.include_router(panchayat_ward_router)
 app.include_router(polling_booth_router)
-
-app.include_router(platform_admin_router)
+app.include_router(master_router)
 
 @app.get("/")
 def root():
@@ -49,9 +44,6 @@ def root():
         "message": "EMS Backend Running",
         "version": "1.0.0",
         "endpoints": {
-            "auth": "/api/v1/auth",
-            "users": "/api/v1/users",
-            "clients": "/api/v1/clients",
             "hierarchy": {
                 "countries": "/api/v1/hierarchy/countries",
                 "states": "/api/v1/hierarchy/states",
@@ -59,7 +51,12 @@ def root():
                 "assemblies": "/api/v1/hierarchy/assemblies",
                 "blocks": "/api/v1/hierarchy/blocks",
                 "panchayat_wards": "/api/v1/hierarchy/panchayat-wards",
-                "polling_booths": "/api/v1/hierarchy/polling-booths"
+                "polling_booths": "/api/v1/hierarchy/polling-booths",
+                "master": {
+                    "tree": "/api/v1/hierarchy/master/tree",
+                    "flat": "/api/v1/hierarchy/master/flat",
+                    "country_tree": "/api/v1/hierarchy/master/country/{country_id}/tree"
+                }
             }
         }
     }
