@@ -5,6 +5,7 @@ from .assembly_service import AssemblyService
 from .block_service import BlockService
 from .panchayat_ward_service import PanchayatWardService
 from .polling_booth_service import PollingBoothService
+from .master_service import MasterService
 
 __all__ = [
     'CountryService',
@@ -13,5 +14,6 @@ __all__ = [
     'AssemblyService',
     'BlockService',
     'PanchayatWardService',
-    'PollingBoothService'
+    'PollingBoothService',
+    'MasterService'
 ]
