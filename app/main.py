@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routes.platform_admins.platform_admin import router as platform_admin_router
 
 # Import existing routes
 
@@ -39,6 +40,8 @@ app.include_router(assembly_router)
 app.include_router(block_router)
 app.include_router(panchayat_ward_router)
 app.include_router(polling_booth_router)
+
+app.include_router(platform_admin_router)
 
 @app.get("/")
 def root():
