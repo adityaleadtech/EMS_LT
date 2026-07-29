@@ -1,4 +1,3 @@
-# app/models/hierarchy/assembly.py
 from __future__ import annotations
 
 from datetime import datetime
@@ -27,21 +26,30 @@ class Assembly(Base):
         index=True
     )
 
-    # Add your actual fields here (I'm guessing based on common patterns)
-    code: Mapped[Optional[str]] = mapped_column(
+    code: Mapped[str] = mapped_column(
         String(20),
-        nullable=True,
+        nullable=False,
         index=True
     )
 
-    name: Mapped[Optional[str]] = mapped_column(
+    name: Mapped[str] = mapped_column(
         String(100),
-        nullable=True,
+        nullable=False,
         index=True
     )
 
     assembly_number: Mapped[Optional[int]] = mapped_column(
         Integer,
+        nullable=True
+    )
+
+    constituency_type: Mapped[Optional[str]] = mapped_column(
+        String(20),
+        nullable=True
+    )
+
+    population: Mapped[Optional[str]] = mapped_column(
+        String(50),
         nullable=True
     )
 
@@ -64,13 +72,12 @@ class Assembly(Base):
         nullable=False
     )
 
-    # ✅ Relationships - Use string references
+    # Relationships
     pc_district: Mapped["PCDistrict"] = relationship(
         "PCDistrict",
         back_populates="assemblies"
     )
 
-    # ⭐ ADD THIS - blocks relationship
     blocks: Mapped[List["Block"]] = relationship(
         "Block",
         back_populates="assembly",
