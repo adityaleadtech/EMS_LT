@@ -12,9 +12,14 @@ from app.routes.hierarchy import (
     polling_booth_router,
     master_router
 )
-
+from app.routes.client.client import router as client_router
+from app.routes.service.service import router as servive_router
+from app.routes.client_service.client_service import router as client_services_router
 from app.routes.platform_users.platform_users import router as platform_users_router
 from app.routes.platform_admins.platform_admin import router as platform_admins_router 
+from app.routes.client.client import router as client_router
+from app.routes.client_admin.client_admin import router as client_admin_router
+from app.routes.client_user.client_user import router as client_user_router
 app = FastAPI(
     title="Election Management System",
     description="EMS with Hierarchical Master Data Management",
@@ -30,8 +35,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(client_router)
+app.include_router(client_services_router)
 # Include hierarchy routers
 app.include_router(platform_admins_router)
+app.include_router(client_user_router)
+app.include_router(servive_router)
+app.include_router(client_router)
+app.include_router(client_admin_router)
 app.include_router(platform_users_router)
 app.include_router(country_router)
 app.include_router(state_router)
@@ -41,6 +52,11 @@ app.include_router(block_router)
 app.include_router(panchayat_ward_router)
 app.include_router(polling_booth_router)
 app.include_router(master_router)
+
+
+
+
+
 
 @app.get("/")
 def root():

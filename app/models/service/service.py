@@ -1,6 +1,7 @@
 from sqlalchemy import Column, DateTime, String, Text, func
 
 from app.core.database import Base
+from sqlalchemy.orm import relationship
 
 
 class Service(Base):
@@ -26,3 +27,8 @@ class Service(Base):
         onupdate=func.now(),
         nullable=False,
     )
+    client_services = relationship(
+    "ClientService",
+    back_populates="service",
+    cascade="all, delete-orphan",
+)
