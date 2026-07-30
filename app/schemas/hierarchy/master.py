@@ -1,4 +1,4 @@
-from typing import List
+from typing import Optional, List
 from pydantic import BaseModel
 
 
@@ -33,6 +33,7 @@ class PanchayatWardNode(BaseNode):
 
 
 class PollingBoothNode(BaseNode):
+    # No extra fields - just id and name from BaseNode
     pass
 
 

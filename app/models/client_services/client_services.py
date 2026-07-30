@@ -34,6 +34,19 @@ class ClientService(Base):
         index=True,
     )
 
+    # ✅ ADDED: service_code for denormalization
+    service_code = Column(
+        String(50),
+        nullable=True,
+        index=True,
+    )
+
+    # ✅ ADDED: service_name for denormalization
+    service_name = Column(
+        String(255),
+        nullable=True,
+    )
+
     is_active = Column(
         Boolean,
         default=True,

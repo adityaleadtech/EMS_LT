@@ -46,7 +46,7 @@ class ClientUserCreate(BaseModel):
 
     designation: Optional[str] = None
 
-    permissions: List[PermissionCreate]
+    permissions: List[PermissionCreate] = []
 
 
 # ==========================================================
@@ -86,7 +86,7 @@ class ClientUserResponse(BaseModel):
 
     is_active: bool
 
-    permissions: List[PermissionResponse]
+    permissions: List[PermissionCreate] = []
 
     class Config:
         from_attributes = True
@@ -142,4 +142,4 @@ class ChangePassword(BaseModel):
 
 
 class PermissionUpdateRequest(BaseModel):
-    permissions: List[PermissionCreate]
+    permissions: List[PermissionCreate] = []

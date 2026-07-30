@@ -10,8 +10,6 @@ class ServiceService:
     def get_services(db: Session):
         services = (
             db.query(Service)
-            .filter(Service.is_active == True)
-            .order_by(Service.display_order.asc())
             .all()
         )
 

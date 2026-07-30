@@ -62,7 +62,7 @@ class ClientServiceService:
         service_id: str,
     ) -> Service:
         """
-        Validate that service exists and is active
+        Validate that service exists
         
         Args:
             db: Database session
@@ -72,14 +72,11 @@ class ClientServiceService:
             Service object
         
         Raises:
-            HTTPException: If service not found or inactive
+            HTTPException: If service not found
         """
         service = (
             db.query(Service)
-            .filter(
-                Service.id == service_id,
-                Service.is_active == True,
-            )
+            .filter(Service.id == service_id)
             .first()
         )
 
@@ -97,7 +94,7 @@ class ClientServiceService:
         service_code: str,
     ) -> Service:
         """
-        Validate that service exists and is active by service code
+        Validate that service exists by service code
         
         Args:
             db: Database session
@@ -107,14 +104,11 @@ class ClientServiceService:
             Service object
         
         Raises:
-            HTTPException: If service not found or inactive
+            HTTPException: If service not found
         """
         service = (
             db.query(Service)
-            .filter(
-                Service.service_code == service_code,
-                Service.is_active == True,
-            )
+            .filter(Service.service_code == service_code)
             .first()
         )
 
