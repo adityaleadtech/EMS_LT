@@ -1,9 +1,10 @@
-# app/models/voter_activity_log.py
+# app/models/voter/voter_activity_log.py
 from sqlalchemy import Column, String, TIMESTAMP, JSON, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.config.database import Base
 import uuid
+
 
 class VoterActivityLog(Base):
     __tablename__ = "voter_activity_log"
@@ -24,7 +25,13 @@ class VoterActivityLog(Base):
     # Timestamp
     performed_at = Column(TIMESTAMP, server_default=func.current_timestamp())
 
-    # Relationships
+    # ========== RELATIONSHIPS ==========
     voter = relationship("VoterMaster", back_populates="activities")
-    client = relationship("Client", foreign_keys=[client_id])
-    user = relationship("ClientUser", foreign_keys=[user_id])
+    client = relationship(
+        "Client",  # ✅ String reference
+        foreign_keys=[client_id]
+    )
+    user = relationship(
+        "ClientUser",  # ✅ String reference
+        foreign_keys=[user_id]
+    )

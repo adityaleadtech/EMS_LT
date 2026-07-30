@@ -1,4 +1,4 @@
-# app/models/client_voter_map.py
+# app/models/voter/client_voter_map.py
 from sqlalchemy import Column, String, Integer, TIMESTAMP, JSON, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -6,8 +6,6 @@ from app.config.database import Base
 from sqlalchemy.ext.mutable import MutableDict
 import uuid
 
-# ========== IMPORT FROM HIERARCHY FOLDER ==========
-from app.models.client.client import Client
 
 class ClientVoterMap(Base):
     __tablename__ = "client_voter_map"
@@ -26,5 +24,8 @@ class ClientVoterMap(Base):
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
     updated_at = Column(TIMESTAMP, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-    # Relationships
-    client = relationship("Client", foreign_keys=[client_id])
+    # ========== RELATIONSHIPS ==========
+    client = relationship(
+        "Client",  # ✅ String reference
+        foreign_keys=[client_id]
+    )

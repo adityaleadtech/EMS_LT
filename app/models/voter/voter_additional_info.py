@@ -1,12 +1,13 @@
-# app/models/voter_additional_info.py
+# app/models/voter/voter_additional_info.py
 from sqlalchemy import Column, String, Boolean, TIMESTAMP, ForeignKey, Text, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.config.database import Base
 import uuid
 
+# ========== CORRECT IMPORTS ==========
 from app.models.client.client import Client
-from app.models.client_users.client_users import ClientUser  
+
 
 class VoterAdditionalInfo(Base):
     __tablename__ = "voter_additional_info"
@@ -34,10 +35,16 @@ class VoterAdditionalInfo(Base):
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
     updated_at = Column(TIMESTAMP, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-    # Relationships
+    # ========== RELATIONSHIPS ==========
     voter = relationship("VoterMaster", back_populates="additional_info")
-    client = relationship("Client", foreign_keys=[client_id])
-    updated_by_user = relationship("ClientUser", foreign_keys=[updated_by])
+    client = relationship(
+        "Client",  # ✅ String reference
+        foreign_keys=[client_id]
+    )
+    updated_by_user = relationship(
+        "ClientUser",  # ✅ String reference
+        foreign_keys=[updated_by]
+    )
 
     __table_args__ = (
         UniqueConstraint("voter_id", "client_id", name="uk_voter_client"),

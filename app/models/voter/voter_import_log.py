@@ -1,13 +1,9 @@
-# app/models/voter_import_log.py
+# app/models/voter/voter_import_log.py
 from sqlalchemy import Column, String, Integer, TIMESTAMP, JSON, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.config.database import Base
 import uuid
-
-
-from app.models.client.client import Client
-from app.models.client_users.client_users import ClientUser
 
 
 class VoterImportLog(Base):
@@ -27,6 +23,12 @@ class VoterImportLog(Base):
     imported_by = Column(String(36), ForeignKey("client_users.id", ondelete="SET NULL"))
     imported_at = Column(TIMESTAMP, server_default=func.current_timestamp())
 
-    # Relationships
-    client = relationship("Client", foreign_keys=[client_id])
-    importer = relationship("ClientUser", foreign_keys=[imported_by])
+    # ========== RELATIONSHIPS ==========
+    client = relationship(
+        "Client",  # ✅ String reference
+        foreign_keys=[client_id]
+    )
+    importer = relationship(
+        "ClientUser",  # ✅ String reference
+        foreign_keys=[imported_by]
+    )

@@ -1,15 +1,17 @@
-# app/models/voter_master.py
+# app/models/voter/voter_master.py
 from sqlalchemy import Column, String, Integer, Boolean, TIMESTAMP, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.config.database import Base
 import uuid
-# ========== IMPORT FROM HIERARCHY FOLDER ==========
+
+# ========== CORRECT IMPORTS ==========
 from app.models.hierarchy.assembly import Assembly
 from app.models.hierarchy.polling_booth import PollingBooth
 from app.models.hierarchy.panchayat_ward import PanchayatWard
 from app.models.hierarchy.pc_district import PCDistrict
 from app.models.client.client import Client
+
 
 class VoterMaster(Base):
     __tablename__ = "voter_master"
@@ -58,13 +60,44 @@ class VoterMaster(Base):
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
     updated_at = Column(TIMESTAMP, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-    # Relationships to existing tables
-    assembly = relationship("Assembly", foreign_keys=[assembly_id])
-    booth = relationship("PollingBooth", foreign_keys=[booth_id])
-    panchayat_ward = relationship("PanchayatWard", foreign_keys=[panchayat_ward_id])
-    pc_district = relationship("PCDistrict", foreign_keys=[pc_district_id])
+    # ========== RELATIONSHIPS - Use string references to avoid circular imports ==========
+    assembly = relationship(
+        "Assembly",
+        foreign_keys=[assembly_id],
+        lazy="select"
+    )
+    booth = relationship(
+        "PollingBooth",
+        foreign_keys=[booth_id],
+        lazy="select"
+    )
+    panchayat_ward = relationship(
+        "PanchayatWard",
+        foreign_keys=[panchayat_ward_id],
+        lazy="select"
+    )
+    pc_district = relationship(
+        "PCDistrict",
+        foreign_keys=[pc_district_id],
+        lazy="select"
+    )
     
-    # Relationships to new tables
-    additional_info = relationship("VoterAdditionalInfo", back_populates="voter", cascade="all, delete-orphan")
-    activities = relationship("VoterActivityLog", back_populates="voter", cascade="all, delete-orphan")
-    group_mappings = relationship("VoterGroupMapping", back_populates="voter", cascade="all, delete-orphan")
+    # Relationships to voter tables (same folder)
+    additional_info = relationship(
+        "VoterAdditionalInfo",
+        back_populates="voter",
+        cascade="all, delete-orphan",
+        lazy="select"
+    )
+    activities = relationship(
+        "VoterActivityLog",
+        back_populates="voter",
+        cascade="all, delete-orphan",
+        lazy="select"
+    )
+    group_mappings = relationship(
+        "VoterGroupMapping",
+        back_populates="voter",
+        cascade="all, delete-orphan",
+        lazy="select"
+    )

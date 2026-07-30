@@ -1,9 +1,12 @@
-# app/models/voter_group_mapping.py
+# app/models/voter/voter_group_mapping.py
 from sqlalchemy import Column, String, TIMESTAMP, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.config.database import Base
 import uuid
+
+# app/routes/voter/voter.py
+from app.models.client.client import Client  # ✅ Correct import
 
 class VoterGroupMapping(Base):
     __tablename__ = "voter_group_mapping"
@@ -15,10 +18,13 @@ class VoterGroupMapping(Base):
     added_at = Column(TIMESTAMP, server_default=func.current_timestamp())
     added_by = Column(String(36), ForeignKey("client_users.id", ondelete="SET NULL"))
 
-    # Relationships
+    # ========== RELATIONSHIPS ==========
     group = relationship("VoterGroupMaster", back_populates="mappings")
     voter = relationship("VoterMaster", back_populates="group_mappings")
-    adder = relationship("ClientUser", foreign_keys=[added_by])
+    adder = relationship(
+        "ClientUser",  # ✅ String reference
+        foreign_keys=[added_by]
+    )
 
     __table_args__ = (
         UniqueConstraint("group_id", "voter_id", name="uk_group_voter"),
