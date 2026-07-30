@@ -23,33 +23,52 @@ class ClientUser(Base):
         index=True,
     )
 
-    full_name = Column(String(255), nullable=False)
+    full_name = Column(
+        String(255),
+        nullable=False,
+    )
 
-    email = Column(String(255), unique=True, nullable=False)
+    email = Column(
+        String(255),
+        unique=True,
+        nullable=False,
+    )
 
-    phone = Column(String(20), unique=True, nullable=False)
+    phone = Column(
+        String(20),
+        unique=True,
+        nullable=False,
+    )
 
-    password = Column(String(255), nullable=False)
+    password = Column(
+        String(255),
+        nullable=False,
+    )
 
-    designation = Column(String(150), nullable=True)
+    designation = Column(
+        String(150),
+        nullable=True,
+    )
 
-    is_active = Column(Boolean, default=True)
+    is_active = Column(
+        Boolean,
+        default=True,
+    )
 
     created_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
+        nullable=False,
     )
 
     updated_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
+        nullable=False,
     )
 
-    client = relationship("Client", back_populates="users")
-
-    permissions = relationship(
-        "UserPermission",
-        back_populates="user",
-        cascade="all, delete-orphan",
+    client = relationship(
+        "Client",
+        back_populates="users",
     )

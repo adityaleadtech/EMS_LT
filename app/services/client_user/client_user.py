@@ -316,7 +316,7 @@ class ClientUserService:
     def get_available_permissions(
         db: Session,
         client_id: str,
-    ) -> List[AvailablePermissionResponse]:
+    ) -> List[PermissionResponse]:
         """
         Get all available permissions for a client
         
@@ -325,7 +325,7 @@ class ClientUserService:
             client_id: Client ID
         
         Returns:
-            List of AvailablePermissionResponse objects
+            List of PermissionResponse objects
         
         Raises:
             HTTPException: If client not found
@@ -349,7 +349,7 @@ class ClientUserService:
 
         for client_service, service in client_services:
             available_permissions.append(
-                AvailablePermissionResponse(
+                PermissionResponse(
                     service_id=service.id,
                     service_name=service.service_name,
                     service_code=service.service_code,
@@ -910,7 +910,74 @@ class ClientUserService:
                 detail="An error occurred while restoring the client user."
             )
 
-   
+    @staticmethod
+    def change_password(
+        db: Session,
+        user_id: str,
+        current_password: str,
+        new_password: str,
+    ) -> dict:
+        """
+        Change client user password
+        
+        Args:
+            db: Database session
+            user_id: User ID
+            current_password: Current password
+            new_password: New password
+        
+        Returns:
+            Success message
+        
+        Raises:
+            HTTPException: If user not found or password validation fails
+        """
+        try:
+            user = (
+                db.query(ClientUser)
+                .filter(ClientUser.id == user_id)
+                .first()
+            )
+
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Client User not found."
+                )
+
+            # Verify current password
+            if not verify_password(current_password, user.password):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Current password is incorrect."
+                )
+
+            # Check if new password is same as current
+            if verify_password(new_password, user.password):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="New password cannot be the same as the current password."
+                )
+
+            # Update password
+            user.password = hash_password(new_password)
+            user.updated_at = datetime.now(timezone.utc)
+
+            db.commit()
+
+            return {"message": "Password changed successfully."}
+
+        except HTTPException:
+            db.rollback()
+            raise
+
+        except Exception:
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="An error occurred while changing the password."
+            )
+
     @staticmethod
     def update_permissions(
         db: Session,

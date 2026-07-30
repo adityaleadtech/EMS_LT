@@ -9,7 +9,6 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.orm import relationship
-from sqlalchemy.orm import relationship
 
 from app.core.database import Base
 
@@ -17,15 +16,40 @@ from app.core.database import Base
 class Client(Base):
     __tablename__ = "clients"
 
-    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = Column(
+        String(36),
+        primary_key=True,
+        default=lambda: str(uuid.uuid4()),
+    )
 
-    client_code = Column(String(50), unique=True, nullable=False, index=True)
-    client_name = Column(String(255), nullable=False)
+    client_code = Column(
+        String(50),
+        unique=True,
+        nullable=False,
+        index=True,
+    )
 
-    party = Column(String(150), nullable=False)
+    client_name = Column(
+        String(255),
+        nullable=False,
+    )
 
-    email = Column(String(255), unique=True, nullable=False)
-    phone = Column(String(20), unique=True, nullable=False)
+    party = Column(
+        String(150),
+        nullable=False,
+    )
+
+    email = Column(
+        String(255),
+        unique=True,
+        nullable=False,
+    )
+
+    phone = Column(
+        String(20),
+        unique=True,
+        nullable=False,
+    )
 
     is_mp = Column(Boolean, default=False)
     is_mla = Column(Boolean, default=False)
@@ -46,9 +70,15 @@ class Client(Base):
 
     description = Column(Text)
 
-    is_active = Column(Boolean, default=True)
+    is_active = Column(
+        Boolean,
+        default=True,
+    )
 
-    created_by = Column(String(36), nullable=False)
+    created_by = Column(
+        String(36),
+        nullable=False,
+    )
 
     created_at = Column(
         DateTime,
@@ -62,14 +92,40 @@ class Client(Base):
         onupdate=func.now(),
         nullable=False,
     )
+
+    # ==========================================================
+    # RELATIONSHIPS
+    # ==========================================================
+
     client_admin = relationship(
-    "ClientAdmin",
-    back_populates="client",
-    uselist=False,
-    cascade="all, delete-orphan",
-)
+        "ClientAdmin",
+        back_populates="client",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
     client_services = relationship(
-    "ClientService",
-    back_populates="client",
-    cascade="all, delete-orphan",
-)
+        "ClientService",
+        back_populates="client",
+        cascade="all, delete-orphan",
+    )
+
+    users = relationship(
+        "ClientUser",
+        back_populates="client",
+        cascade="all, delete-orphan",
+    )
+    
+    social_media = relationship(
+        "SocialMedia",
+        back_populates="client",
+        uselist=False,
+        cascade="all, delete-orphan",
+        foreign_keys="SocialMedia.client_id"
+    )
+   
+    news = relationship(
+       "News",
+       back_populates="client",
+       cascade="all, delete-orphan",
+    )

@@ -6,6 +6,7 @@ from .block import router as block_router
 from .panchayat_ward import router as panchayat_ward_router
 from .polling_booth import router as polling_booth_router
 from .master import router as master_router
+from .import_routes import router as import_router
 
 __all__ = [
     'country_router',
@@ -15,5 +16,6 @@ __all__ = [
     'block_router',
     'panchayat_ward_router',
     'polling_booth_router',
-    'master_router'
+    'master_router',
+    'import_router'
 ]
